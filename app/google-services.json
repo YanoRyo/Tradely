@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "630031861898",
+    "project_id": "tradely-4936b",
+    "storage_bucket": "tradely-4936b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630031861898:android:9cca5dc679ec2485560573",
+        "android_client_info": {
+          "package_name": "com.example.tradely"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630031861898-oe4oanehnkfcd01pik77cl7o1rusc2le.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tradely",
+            "certificate_hash": "b0e54d6e019d1938e35771d60b1a11d9eaf8e28e"
+          }
+        },
+        {
+          "client_id": "630031861898-cnvl65t93p5l8ne99ml4bjs89cr35icp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjYgH8mgOvwe0DPmUgcbMKtrEwSGD5_8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630031861898-cnvl65t93p5l8ne99ml4bjs89cr35icp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
