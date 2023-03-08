@@ -2,4 +2,5 @@
 <resources>
     
     <dimen name="splash_title_text_size">35sp</dimen>
+    <dimen name="button_backgrand_radius">10sp</dimen>
 </resources>
