@@ -9,6 +9,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityLoginBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
 
@@ -30,6 +31,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+        // Click event assigned to Forgot Password text.
+        binding.tvForgotPassword.setOnClickListener(this)
+        // Click event assigned to Login button.
+        binding.btnLogin.setOnClickListener(this)
+        // Click event assigned to Register text.
+        binding.tvRegister.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
@@ -41,7 +48,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
                 R.id.btn_login -> {
 
-                    validateLoginDetails()
+                    logInRegisteredUser()
                 }
 
                 R.id.tv_register -> {
@@ -64,9 +71,36 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 false
             }
             else -> {
-                showErrorSnackBar("Your details are valid.", false)
                 true
             }
+        }
+    }
+
+    private fun logInRegisteredUser() {
+
+        if (validateLoginDetails()) {
+
+            // Show the progress dialog.
+            showProgressDialog(resources.getString(R.string.please_wait))
+
+            // Get the text from editText and trim the space
+            val email = binding.etEmail.text.toString().trim { it <= ' ' }
+            val password = binding.etPassword.text.toString().trim { it <= ' ' }
+
+            // Log-In using FirebaseAuth
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+
+                    // Hide the progress dialog
+                    hideProgressDialog()
+
+                    if (task.isSuccessful) {
+
+                        showErrorSnackBar("You are logged in successfully.", false)
+                    } else {
+                        showErrorSnackBar(task.exception!!.message.toString(), true)
+                    }
+                }
         }
     }
 }
