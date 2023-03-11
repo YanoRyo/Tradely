@@ -6,15 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import com.example.tradely.databinding.ActivityLoginBinding
+import com.example.tradely.databinding.ActivityRegisterBinding
 
-class LoginActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -29,8 +29,8 @@ class LoginActivity : AppCompatActivity() {
             )
         }
 
-        binding.tvRegister.setOnClickListener {
-            val intent = Intent(this@LoginActivity,RegisterActivity::class.java)
+        binding.tvLogin.setOnClickListener {
+            val intent = Intent(this@RegisterActivity,LoginActivity::class.java)
             startActivity(intent)
         }
     }
