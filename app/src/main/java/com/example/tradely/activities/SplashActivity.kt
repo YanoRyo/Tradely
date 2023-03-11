@@ -34,13 +34,10 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed(
             {
                 // MainActivityを起動させる
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                 finish()
             },
             2500
         )
-
-//        val typeface: Typeface = Typeface.createFromAsset(assets,"Montserrat-Bold.ttf")
-//        binding.tvAppName.typeface = typeface
     }
 }
