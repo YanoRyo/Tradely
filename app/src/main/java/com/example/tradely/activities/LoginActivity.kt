@@ -44,6 +44,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             when (view.id) {
 
                 R.id.tv_forgot_password -> {
+                    // Launch the forgot password screen when the user clicks on the forgot password
+                    val intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
+                    startActivity(intent)
                 }
 
                 R.id.btn_login -> {
