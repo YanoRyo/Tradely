@@ -1,6 +1,8 @@
 package com.example.tradely.firestore
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.example.tradely.activities.LoginActivity
 import com.example.tradely.activities.RegisterActivity
@@ -63,6 +65,20 @@ class FirestoreClass {
 
                 // Here we have received the document snapshot which is converted into the User Data model object.
                 val user = document.toObject(User::class.java)!!
+
+                val sharedPreferences = activity.getSharedPreferences(
+                    Constants.TRADELY_PREFERENCES,
+                    Context.MODE_PRIVATE
+                )
+
+                // key: logged_in_username
+                // value: ${user.firstName} ${user.lastName}
+                val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                editor.putString(
+                    Constants.LOGGED_IN_USERNAME,
+                    "${user.firstName} ${user.lastName}"
+                )
+                editor.apply()
 
                 when (activity) {
                     is LoginActivity -> {
