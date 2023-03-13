@@ -12,6 +12,7 @@ import com.example.tradely.R
 import com.example.tradely.databinding.ActivityLoginBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.User
+import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
@@ -119,6 +120,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         if (user.profileCompleted == 0) {
             // If the user profile is incomplete then launch the UserProfileActivity
             val intent = Intent(this@LoginActivity,UserProfileActivity::class.java)
+            intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
             startActivity(intent)
         } else {
             // Redirect the user to Main Screen after log in.
