@@ -49,4 +49,6 @@
 
     <string name="image_selection_failed">Image selection Failed!</string>
 
+    <string name="err_msg_enter_mobile_number">Please enter mobile number.</string>
+
 </resources>
