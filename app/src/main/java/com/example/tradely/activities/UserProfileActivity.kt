@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,6 +15,7 @@ import com.example.tradely.R.*
 import com.example.tradely.databinding.ActivityUserProfileBinding
 import com.example.tradely.models.User
 import com.example.tradely.utils.Constants
+import com.example.tradely.utils.GlideLoader
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity(), View.OnClickListener {
@@ -90,6 +90,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
@@ -98,7 +99,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                     try {
                         // The uri of selected image from phone storage.
                         val selectedImageFileUri = data.data!!
-                        binding.ivUserPhoto.setImageURI(selectedImageFileUri)
+                        GlideLoader(this).loadUserPicture(selectedImageFileUri, binding.ivUserPhoto)
                     } catch (e: IOException) {
                         e.printStackTrace()
                         Toast.makeText(
