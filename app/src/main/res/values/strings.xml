@@ -51,4 +51,6 @@
 
     <string name="err_msg_enter_mobile_number">Please enter mobile number.</string>
 
+    <string name="msg_profile_update_success">Your Profile is updated successfully.</string>
+
 </resources>

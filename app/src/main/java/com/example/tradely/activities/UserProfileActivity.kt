@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.example.tradely.R
 import com.example.tradely.R.*
 import com.example.tradely.databinding.ActivityUserProfileBinding
+import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.User
 import com.example.tradely.utils.Constants
 import com.example.tradely.utils.GlideLoader
@@ -22,26 +23,26 @@ import java.io.IOException
 class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityUserProfileBinding
+    private lateinit var mUserDetails:User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        var userDetails = User()
         if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
             // Get the User details from intents as a parcelable
-            userDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
+            mUserDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
         }
 
         binding.etFirstName.isEnabled = false
-        binding.etFirstName.setText(userDetails.firstName)
+        binding.etFirstName.setText(mUserDetails.firstName)
 
         binding.etLastName.isEnabled = false
-        binding.etLastName.setText(userDetails.lastName)
+        binding.etLastName.setText(mUserDetails.lastName)
 
         binding.etEmail.isEnabled = false
-        binding.etEmail.setText(userDetails.email)
+        binding.etEmail.setText(mUserDetails.email)
 
         binding.ivUserPhoto.setOnClickListener(this@UserProfileActivity)
         binding.btnSubmit.setOnClickListener(this@UserProfileActivity)
@@ -69,13 +70,35 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                 }
                 id.btn_submit -> {
                     if (validateUserProfileDetails()) {
-                        showErrorSnackBar("Your details are valid. You can update them.",false)
+
+                        val userHashMap = HashMap<String,Any>()
+                        val mobileNumber = binding.etMobileNumber.text.toString().trim() { it <= ' '}
+                        val gender = if (binding.rbMale.isChecked){
+                            Constants.MALE
+                        }else{
+                            Constants.FEMALE
+                        }
+                        if (mobileNumber.isNotEmpty()) {
+                            userHashMap[Constants.MOBILE] = mobileNumber.toLong()
+                        }
+                        // ex)key: gender value: male
+                        userHashMap[Constants.GENDER] = gender
+
+                        showProgressDialog(resources.getString(string.please_wait))
+
+                        FirestoreClass().updateUserProfileData(this, userHashMap)
                     }
                 }
             }
         }
     }
 
+    fun userProfileUpdateSuccess() {
+        hideProgressDialog()
+        Toast.makeText(this@UserProfileActivity, resources.getString(string.msg_profile_update_success),Toast.LENGTH_LONG).show()
+        startActivity(Intent(this@UserProfileActivity, MainActivity::class.java))
+        finish()
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
