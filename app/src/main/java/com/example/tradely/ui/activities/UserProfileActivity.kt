@@ -40,18 +40,52 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             mUserDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
         }
 
-        binding.etFirstName.isEnabled = false
         binding.etFirstName.setText(mUserDetails.firstName)
-
-        binding.etLastName.isEnabled = false
         binding.etLastName.setText(mUserDetails.lastName)
-
         binding.etEmail.isEnabled = false
         binding.etEmail.setText(mUserDetails.email)
+
+        if (mUserDetails.profileCompleted == 0) {
+            binding.tvTitle.text = resources.getString(string.title_complete_profile)
+
+            binding.etFirstName.isEnabled = false
+
+            binding.etLastName.isEnabled = false
+
+        } else {
+            setupActionBar()
+            binding.tvTitle.text = resources.getString(string.title_edit_profile)
+            GlideLoader(this@UserProfileActivity).loadUserPicture(mUserDetails.image, binding.ivUserPhoto)
+
+            if (mUserDetails.mobile != 0L) {
+                binding.etMobileNumber.setText(mUserDetails.mobile.toString())
+            }
+            if (mUserDetails.gender == Constants.MALE) {
+                binding.rbMale.isChecked = true
+            }else {
+                binding.rbFemale.isChecked = true
+            }
+        }
 
         binding.ivUserPhoto.setOnClickListener(this@UserProfileActivity)
         binding.btnSubmit.setOnClickListener(this@UserProfileActivity)
 
+    }
+
+    /**
+     * A function for actionBar Setup.
+     */
+    private fun setupActionBar() {
+
+        setSupportActionBar(binding.toolbarUserProfileActivity)
+
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+        }
+
+        binding.toolbarUserProfileActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     override fun onClick(v: View?) {
@@ -89,6 +123,16 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
     private fun updateUserProfileDetails() {
         val userHashMap = HashMap<String,Any>()
+
+        val firstName = binding.etFirstName.text.toString().trim() { it <= ' '}
+        if (firstName != mUserDetails.firstName) {
+            userHashMap[Constants.FIRST_NAME] = firstName
+        }
+        val lastName = binding.etLastName.text.toString().trim() { it <= ' '}
+        if (lastName != mUserDetails.lastName) {
+            userHashMap[Constants.LAST_NAME] = lastName
+        }
+
         val mobileNumber = binding.etMobileNumber.text.toString().trim() { it <= ' '}
         val gender = if (binding.rbMale.isChecked){
             Constants.MALE
@@ -98,9 +142,14 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         if (mUserProfileImageURL.isNotEmpty()) {
             userHashMap[Constants.IMAGE] = mUserProfileImageURL
         }
-        if (mobileNumber.isNotEmpty()) {
+        if (mobileNumber.isNotEmpty() && mobileNumber != mUserDetails.mobile.toString()) {
             userHashMap[Constants.MOBILE] = mobileNumber.toLong()
         }
+
+        if (gender.isNotEmpty() && gender != mUserDetails.gender) {
+            userHashMap[Constants.GENDER] = gender
+        }
+
         // ex)key: gender value: male
         userHashMap[Constants.GENDER] = gender
         userHashMap[Constants.COMPLETE_PROFILE] = 1
@@ -111,7 +160,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
     fun userProfileUpdateSuccess() {
         hideProgressDialog()
         Toast.makeText(this@UserProfileActivity, resources.getString(string.msg_profile_update_success),Toast.LENGTH_LONG).show()
-        startActivity(Intent(this@UserProfileActivity, MainActivity::class.java))
+        startActivity(Intent(this@UserProfileActivity, DashboardActivity::class.java))
         finish()
     }
     override fun onRequestPermissionsResult(
