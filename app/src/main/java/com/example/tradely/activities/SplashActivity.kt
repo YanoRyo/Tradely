@@ -34,7 +34,7 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed(
             {
                 // MainActivityを起動させる
-                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                startActivity(Intent(this@SplashActivity, DashboardActivity::class.java))
                 finish()
             },
             2500
