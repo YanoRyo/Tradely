@@ -1,4 +1,4 @@
-package com.example.tradely.activities.ui.home
+package com.example.tradely.ui.activities.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,15 +20,13 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+//        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
         val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        textView.text = "This is home Fragment"
+
         return root
     }
 

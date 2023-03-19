@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
-import com.example.tradely.activities.LoginActivity
-import com.example.tradely.activities.RegisterActivity
-import com.example.tradely.activities.UserProfileActivity
+import com.example.tradely.ui.activities.LoginActivity
+import com.example.tradely.ui.activities.RegisterActivity
+import com.example.tradely.ui.activities.UserProfileActivity
 import com.example.tradely.models.User
 import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth

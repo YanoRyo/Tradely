@@ -1,4 +1,4 @@
-package com.example.tradely.activities.ui.notifications
+package com.example.tradely.ui.activities.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,15 +20,13 @@ class NotificationsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
+//        val notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
         val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+            textView.text = "This is notifications Fragment"
+
         return root
     }
 

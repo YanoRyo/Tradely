@@ -1,4 +1,4 @@
-package com.example.tradely.activities.ui.dashboard
+package com.example.tradely.ui.activities.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,15 +20,13 @@ class DashboardFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+//        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
         val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        textView.text = "This is dashboard Fragment"
+
         return root
     }
 

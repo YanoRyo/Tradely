@@ -1,6 +1,5 @@
-package com.example.tradely.activities
+package com.example.tradely.ui.activities
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils

@@ -1,4 +1,4 @@
-package com.example.tradely.activities
+package com.example.tradely.ui.activities
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity

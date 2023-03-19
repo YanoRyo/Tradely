@@ -1,10 +1,9 @@
-package com.example.tradely.activities
+package com.example.tradely.ui.activities
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -114,7 +113,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
         if (user.profileCompleted == 0) {
             // If the user profile is incomplete then launch the UserProfileActivity
-            val intent = Intent(this@LoginActivity,UserProfileActivity::class.java)
+            val intent = Intent(this@LoginActivity, UserProfileActivity::class.java)
             intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
             startActivity(intent)
         } else {
