@@ -9,7 +9,7 @@ import com.example.tradely.R
 import com.example.tradely.databinding.FragmentProductsBinding
 import com.example.tradely.ui.activities.AddProductActivity
 
-class ProductsFragment : Fragment() {
+class ProductsFragment : BaseFragment() {
 
     private var _binding: FragmentProductsBinding? = null
 
@@ -29,8 +29,6 @@ class ProductsFragment : Fragment() {
 
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val textView: TextView = binding.textHome
-        textView.text = "This is home Fragment"
 
         return root
     }
