@@ -1,4 +1,4 @@
-package com.example.tradely.ui.activities.fragments
+package com.example.tradely.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

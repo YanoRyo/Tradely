@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.tradely.models.Product
 import com.example.tradely.models.User
 import com.example.tradely.ui.activities.*
-import com.example.tradely.ui.activities.fragments.ProductsFragment
+import com.example.tradely.ui.fragments.ProductsFragment
 import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

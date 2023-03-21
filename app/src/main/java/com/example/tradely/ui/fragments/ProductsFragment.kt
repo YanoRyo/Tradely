@@ -1,16 +1,16 @@
-package com.example.tradely.ui.activities.fragments
+package com.example.tradely.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tradely.R
 import com.example.tradely.databinding.FragmentProductsBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Product
 import com.example.tradely.ui.activities.AddProductActivity
+import com.example.tradely.ui.adapters.MyProductsListAdapter
 
 class ProductsFragment : BaseFragment() {
 
@@ -27,9 +27,17 @@ class ProductsFragment : BaseFragment() {
 
     fun successProductsListFromFireStore(productList: ArrayList<Product>) {
         hideProgressDialog()
+        if (productList.size > 0){
+            binding.rvMyProductItems.visibility = View.VISIBLE
+            binding.tvNoProductsFound.visibility = View.GONE
 
-        for (i in productList){
-            Log.i("Product Name", i.title)
+            binding.rvMyProductItems.layoutManager = LinearLayoutManager(activity)
+            binding.rvMyProductItems.setHasFixedSize(true)
+            val adapterProduct = MyProductsListAdapter(requireActivity(),productList)
+            binding.rvMyProductItems.adapter = adapterProduct
+        } else {
+            binding.rvMyProductItems.visibility = View.GONE
+            binding.tvNoProductsFound.visibility = View.VISIBLE
         }
     }
 

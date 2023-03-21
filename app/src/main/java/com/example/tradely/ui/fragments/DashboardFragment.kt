@@ -1,4 +1,4 @@
-package com.example.tradely.ui.activities.fragments
+package com.example.tradely.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.tradely.R
 import com.example.tradely.databinding.FragmentDashboardBinding
-import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.ui.activities.LoginActivity
 import com.example.tradely.ui.activities.SettingsActivity
 import com.google.firebase.auth.FirebaseAuth

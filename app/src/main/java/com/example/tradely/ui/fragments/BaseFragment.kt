@@ -1,4 +1,4 @@
-package com.example.tradely.ui.activities.fragments
+package com.example.tradely.ui.fragments
 
 import android.app.Dialog
 import android.os.Bundle
