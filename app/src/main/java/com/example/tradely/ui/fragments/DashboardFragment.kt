@@ -2,14 +2,15 @@ package com.example.tradely.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.tradely.R
 import com.example.tradely.databinding.FragmentDashboardBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Product
 import com.example.tradely.ui.activities.LoginActivity
 import com.example.tradely.ui.activities.SettingsActivity
+import com.example.tradely.ui.adapters.DashboardItemListAdapter
 import com.google.firebase.auth.FirebaseAuth
 
 class DashboardFragment : BaseFragment() {
@@ -71,8 +72,17 @@ class DashboardFragment : BaseFragment() {
 
     fun successDashboardItemList(dashboardItemList: ArrayList<Product>){
         hideProgressDialog()
-        for (i in dashboardItemList){
-            Log.i("Item Title", i.title)
+        if (dashboardItemList.size > 0){
+            binding.rvDashboardItems.visibility = View.VISIBLE
+            binding.tvNoDashboardItemsFound.visibility = View.GONE
+
+            binding.rvDashboardItems.layoutManager = GridLayoutManager(activity,2)
+            binding.rvDashboardItems.setHasFixedSize(true)
+            val adapterProduct = DashboardItemListAdapter(requireActivity(),dashboardItemList)
+            binding.rvDashboardItems.adapter = adapterProduct
+        } else {
+            binding.rvDashboardItems.visibility = View.GONE
+            binding.tvNoDashboardItemsFound.visibility = View.VISIBLE
         }
     }
 

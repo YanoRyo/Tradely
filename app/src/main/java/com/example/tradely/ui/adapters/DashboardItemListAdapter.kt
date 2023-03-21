@@ -10,15 +10,15 @@ import com.example.tradely.R
 import com.example.tradely.models.Product
 import com.example.tradely.utils.GlideLoader
 
-open class MyProductsListAdapter(
+class DashboardItemListAdapter (
     private val context: Context,
     private val list: ArrayList<Product>
-    ):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
             LayoutInflater.from(context).inflate(
-                R.layout.item_list_layout,
+                R.layout.item_dashboard_layout,
                 parent,
                 false
             )
@@ -33,9 +33,9 @@ open class MyProductsListAdapter(
         val model = list[position]
 
         if (holder is MyViewHolder){
-            GlideLoader(context).loadProductPicture(model.image, holder.itemView.findViewById(R.id.iv_item_image))
-            holder.itemView.findViewById<TextView>(R.id.tv_item_name).text = model.title
-            holder.itemView.findViewById<TextView>(R.id.tv_item_price).text = "$${model.price}"
+            GlideLoader(context).loadProductPicture(model.image, holder.itemView.findViewById(R.id.iv_dashboard_item_image))
+            holder.itemView.findViewById<TextView>(R.id.tv_dashboard_item_title).text = model.title
+            holder.itemView.findViewById<TextView>(R.id.tv_dashboard_item_price).text = "$${model.price}"
         }
     }
 
