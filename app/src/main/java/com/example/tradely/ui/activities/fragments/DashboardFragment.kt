@@ -7,7 +7,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.tradely.R
 import com.example.tradely.databinding.FragmentDashboardBinding
+import com.example.tradely.firestore.FirestoreClass
+import com.example.tradely.ui.activities.LoginActivity
 import com.example.tradely.ui.activities.SettingsActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class DashboardFragment : Fragment() {
 
@@ -51,7 +54,12 @@ class DashboardFragment : Fragment() {
 
         when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(activity, SettingsActivity::class.java))
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                if (currentUser != null){
+                    startActivity(Intent(activity, SettingsActivity::class.java))
+                } else {
+                    startActivity(Intent(activity, LoginActivity::class.java))
+                }
                 return true
             }
         }

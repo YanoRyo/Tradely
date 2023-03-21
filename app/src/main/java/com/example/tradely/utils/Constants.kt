@@ -12,6 +12,7 @@ object Constants {
     const val PRODUCTS:String = "products"
 
     const val TRADELY_PREFERENCES: String = "TradelyPrefs"
+    const val USER_ID:String = "user_id"
     const val LOGGED_IN_USERNAME: String = "logged_in_username"
     const val EXTRA_USER_DETAILS:String = "extra_user_details"
     const val READ_STORAGE_PERMISSION_CODE = 2

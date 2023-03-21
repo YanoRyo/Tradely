@@ -2,11 +2,14 @@ package com.example.tradely.ui.activities.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.tradely.R
 import com.example.tradely.databinding.FragmentProductsBinding
+import com.example.tradely.firestore.FirestoreClass
+import com.example.tradely.models.Product
 import com.example.tradely.ui.activities.AddProductActivity
 
 class ProductsFragment : BaseFragment() {
@@ -21,6 +24,25 @@ class ProductsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
+    fun successProductsListFromFireStore(productList: ArrayList<Product>) {
+        hideProgressDialog()
+
+        for (i in productList){
+            Log.i("Product Name", i.title)
+        }
+    }
+
+    private fun getProductListFromFireStore() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getProductsList(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getProductListFromFireStore()
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
