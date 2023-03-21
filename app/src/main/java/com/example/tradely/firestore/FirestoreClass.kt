@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.tradely.models.Product
 import com.example.tradely.models.User
 import com.example.tradely.ui.activities.*
+import com.example.tradely.ui.fragments.DashboardFragment
 import com.example.tradely.ui.fragments.ProductsFragment
 import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -233,6 +234,25 @@ class FirestoreClass {
                         fragment.successProductsListFromFireStore(productsList)
                     }
                 }
+            }
+    }
+
+    fun getDashboardItemList(fragment: DashboardFragment){
+        mFireStore.collection(Constants.PRODUCTS)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e("Product List", document.documents.toString())
+                val productsList: ArrayList<Product> = ArrayList()
+                for (i in document.documents) {
+                    val product = i.toObject(Product::class.java)
+                    product!!.product_id = i.id
+                    productsList.add(product)
+                }
+                fragment.successDashboardItemList(productsList)
+            }
+            .addOnFailureListener { e ->
+                fragment.hideProgressDialog()
+                Log.e(fragment.javaClass.simpleName, "Error while getting dashboard items list.",e)
             }
     }
 }

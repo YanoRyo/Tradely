@@ -2,16 +2,17 @@ package com.example.tradely.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import com.example.tradely.R
 import com.example.tradely.databinding.FragmentDashboardBinding
+import com.example.tradely.firestore.FirestoreClass
+import com.example.tradely.models.Product
 import com.example.tradely.ui.activities.LoginActivity
 import com.example.tradely.ui.activities.SettingsActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment() {
 
     private var _binding: FragmentDashboardBinding? = null
 
@@ -24,6 +25,11 @@ class DashboardFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    override fun onResume() {
+        super.onResume()
+        getDashboardItemList()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -31,8 +37,6 @@ class DashboardFragment : Fragment() {
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val textView: TextView = binding.textDashboard
-        textView.text = "This is dashboard Fragment"
 
         return root
     }
@@ -63,5 +67,17 @@ class DashboardFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun successDashboardItemList(dashboardItemList: ArrayList<Product>){
+        hideProgressDialog()
+        for (i in dashboardItemList){
+            Log.i("Item Title", i.title)
+        }
+    }
+
+    private fun getDashboardItemList(){
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getDashboardItemList(this@DashboardFragment)
     }
 }
