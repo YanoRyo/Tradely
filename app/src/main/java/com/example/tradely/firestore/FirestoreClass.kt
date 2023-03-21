@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import com.example.tradely.models.Product
 import com.example.tradely.models.User
 import com.example.tradely.ui.activities.*
 import com.example.tradely.utils.Constants
@@ -42,7 +43,7 @@ class FirestoreClass {
             }
     }
 
-    private fun getCurrentUserID(): String {
+     fun getCurrentUserID(): String {
         // An Instance of currentUser using FirebaseAuth
         val currentUser = FirebaseAuth.getInstance().currentUser
 
@@ -192,6 +193,23 @@ class FirestoreClass {
                     activity.javaClass.simpleName,
                     exception.message,
                     exception
+                )
+            }
+    }
+
+    fun uploadProductDetails(activity: AddProductActivity, productInfo: Product) {
+        mFireStore.collection(Constants.PRODUCTS)
+            .document()
+            .set(productInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.productUploadSuccess()
+            }
+            .addOnFailureListener {e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while upload the product details.",
+                    e
                 )
             }
     }

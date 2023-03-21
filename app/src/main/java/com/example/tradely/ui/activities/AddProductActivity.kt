@@ -1,6 +1,7 @@
 package com.example.tradely.ui.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityAddProductBinding
 import com.example.tradely.firestore.FirestoreClass
+import com.example.tradely.models.Product
 import com.example.tradely.utils.Constants
 import com.example.tradely.utils.GlideLoader
 import java.io.IOException
@@ -22,6 +24,7 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityAddProductBinding
     private var mSelectedImageFileURL: Uri? = null
+    private var mProductImageFileURL: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,6 +162,15 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
+    fun productUploadSuccess() {
+        hideProgressDialog()
+        Toast.makeText(
+            this@AddProductActivity,
+            resources.getString(R.string.product_uploaded_success_message),
+            Toast.LENGTH_SHORT
+        ).show()
+        finish()
+    }
 
     /**
      * A function to upload the selected product image to firebase cloud storage.
@@ -173,8 +185,22 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
     }
 
     fun imageUploadSuccess(imageURL: String){
-        hideProgressDialog()
-//        mSelectedImageFileURL = imageURL
-//        updateUserProfileDetails()
+        mProductImageFileURL = imageURL
+        uploadProductDetails()
+    }
+
+    private fun uploadProductDetails() {
+        val username = this.getSharedPreferences(Constants.TRADELY_PREFERENCES, Context.MODE_PRIVATE).getString(Constants.LOGGED_IN_USERNAME, "")!!
+
+        val product = Product(
+            FirestoreClass().getCurrentUserID(),
+            username,
+            binding.etProductTitle.text.toString().trim { it <= ' '},
+            binding.etProductPrice.text.toString().trim { it <= ' '},
+            binding.etProductDescription.text.toString().trim { it <= ' '},
+            binding.etProductQuantity.text.toString().trim { it <= ' '},
+            mProductImageFileURL
+        )
+        FirestoreClass().uploadProductDetails(this, product)
     }
 }
