@@ -164,12 +164,17 @@ class AddProductActivity : BaseActivity(), View.OnClickListener {
      * A function to upload the selected product image to firebase cloud storage.
      */
     private fun uploadProductImage() {
-//        showProgressDialog(resources.getString(R.string.please_wait))
-//
-//        FirestoreClass().uploadImageToCloudStorage(
-//            this@AddProductActivity,
-//            mSelectedImageFileURL,
-//            Constants.PRODUCT_IMAGE
-//        )
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().uploadImageToCloudStorage(
+            this@AddProductActivity,
+            mSelectedImageFileURL,
+            Constants.PRODUCT_IMAGE
+        )
+    }
+
+    fun imageUploadSuccess(imageURL: String){
+        hideProgressDialog()
+//        mSelectedImageFileURL = imageURL
+//        updateUserProfileDetails()
     }
 }
