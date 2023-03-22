@@ -4,15 +4,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradely.R
 import com.example.tradely.models.Product
+import com.example.tradely.ui.fragments.ProductsFragment
 import com.example.tradely.utils.GlideLoader
 
 open class MyProductsListAdapter(
     private val context: Context,
-    private val list: ArrayList<Product>
+    private val list: ArrayList<Product>,
+    private val fragment: ProductsFragment
     ):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -36,6 +40,10 @@ open class MyProductsListAdapter(
             GlideLoader(context).loadProductPicture(model.image, holder.itemView.findViewById(R.id.iv_item_image))
             holder.itemView.findViewById<TextView>(R.id.tv_item_name).text = model.title
             holder.itemView.findViewById<TextView>(R.id.tv_item_price).text = "$${model.price}"
+
+            holder.itemView.findViewById<ImageButton>(R.id.ib_delete_product).setOnClickListener {
+                fragment.deleteProduct(model.product_id)
+            }
         }
     }
 
