@@ -1,15 +1,16 @@
 package com.example.tradely.ui.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradely.R
 import com.example.tradely.models.Product
+import com.example.tradely.ui.activities.ProductDetailsActivity
 import com.example.tradely.ui.fragments.ProductsFragment
 import com.example.tradely.utils.GlideLoader
 
@@ -43,6 +44,11 @@ open class MyProductsListAdapter(
 
             holder.itemView.findViewById<ImageButton>(R.id.ib_delete_product).setOnClickListener {
                 fragment.deleteProduct(model.product_id)
+            }
+
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, ProductDetailsActivity::class.java)
+                context.startActivities(arrayOf(intent))
             }
         }
     }
