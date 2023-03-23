@@ -9,8 +9,10 @@ import com.example.tradely.databinding.FragmentDashboardBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Product
 import com.example.tradely.ui.activities.LoginActivity
+import com.example.tradely.ui.activities.ProductDetailsActivity
 import com.example.tradely.ui.activities.SettingsActivity
 import com.example.tradely.ui.adapters.DashboardItemListAdapter
+import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 
 class DashboardFragment : BaseFragment() {
@@ -78,8 +80,16 @@ class DashboardFragment : BaseFragment() {
 
             binding.rvDashboardItems.layoutManager = GridLayoutManager(activity,2)
             binding.rvDashboardItems.setHasFixedSize(true)
-            val adapterProduct = DashboardItemListAdapter(requireActivity(),dashboardItemList)
-            binding.rvDashboardItems.adapter = adapterProduct
+            val adapter = DashboardItemListAdapter(requireActivity(),dashboardItemList)
+            binding.rvDashboardItems.adapter = adapter
+
+            adapter.setOnClickLister(object: DashboardItemListAdapter.OnClickListener{
+                override fun onClick(position: Int, product: Product) {
+                    val intent = Intent(context, ProductDetailsActivity::class.java)
+                    intent.putExtra(Constants.EXTRA_PRODUCT_ID, product.product_id)
+                    startActivity(intent)
+                }
+            })
         } else {
             binding.rvDashboardItems.visibility = View.GONE
             binding.tvNoDashboardItemsFound.visibility = View.VISIBLE
