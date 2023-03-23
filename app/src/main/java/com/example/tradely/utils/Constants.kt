@@ -27,6 +27,7 @@ object Constants {
     const val IMAGE:String = "image"
     const val USER_PROFILE_IMAGE:String = "User_Profile_Image"
     const val PRODUCT_IMAGE:String = "Product_Image"
+    const val EXTRA_PRODUCT_ID:String = "extra_product_id"
 
     fun showImageChooser(activity: Activity) {
         // An intent for launching the image selection of phone storage.

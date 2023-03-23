@@ -12,6 +12,7 @@ import com.example.tradely.R
 import com.example.tradely.models.Product
 import com.example.tradely.ui.activities.ProductDetailsActivity
 import com.example.tradely.ui.fragments.ProductsFragment
+import com.example.tradely.utils.Constants
 import com.example.tradely.utils.GlideLoader
 
 open class MyProductsListAdapter(
@@ -48,6 +49,7 @@ open class MyProductsListAdapter(
 
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, ProductDetailsActivity::class.java)
+                intent.putExtra(Constants.EXTRA_PRODUCT_ID, model.product_id)
                 context.startActivities(arrayOf(intent))
             }
         }
