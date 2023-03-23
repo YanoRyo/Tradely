@@ -1,13 +1,15 @@
 package com.example.tradely.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityProductDetailsBinding
+import com.example.tradely.firestore.FirestoreClass
+import com.example.tradely.models.Product
 import com.example.tradely.utils.Constants
+import com.example.tradely.utils.GlideLoader
 
-class ProductDetailsActivity : AppCompatActivity() {
+class ProductDetailsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityProductDetailsBinding
     private var mProductId:String = ""
@@ -23,7 +25,25 @@ class ProductDetailsActivity : AppCompatActivity() {
             mProductId = intent.getStringExtra(Constants.EXTRA_PRODUCT_ID)!!
             Log.i("product id", mProductId)
         }
+        getProductDetails()
     }
+
+    private fun getProductDetails() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getProductDetails(this@ProductDetailsActivity, mProductId)
+    }
+    fun productDetailsSuccess(product: Product) {
+        hideProgressDialog()
+        GlideLoader(this@ProductDetailsActivity).loadProductPicture(
+            product.image,
+            binding.ivProductDetailImage
+        )
+        binding.tvProductDetailsTitle.text = product.title
+        binding.tvProductDetailsPrice.text = "$${product.price}"
+        binding.tvProductDetailsDescription.text = product.description
+        binding.tvProductDetailsAvailableQuantity.text = product.stock_quantity
+    }
+
 
     private fun setupActionBar() {
         setSupportActionBar(binding.toolbarProductDetailsActivity)
