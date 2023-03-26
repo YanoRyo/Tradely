@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.fragment.app.Fragment
+import com.example.tradely.models.CartItem
 import com.example.tradely.models.Product
 import com.example.tradely.models.User
 import com.example.tradely.ui.activities.*
@@ -254,6 +255,20 @@ class FirestoreClass {
                 Log.e(activity.javaClass.simpleName, "Error while getting the product details")
             }
     }
+
+    fun addCartItems(activity: ProductDetailsActivity, addCartItem: CartItem) {
+        mFireStore.collection(Constants.CART_ITEMS)
+            .document()
+            .set(addCartItem, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.addToCartSuccess()
+            }
+            .addOnFailureListener {
+                e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while creating the document for cart items.", e)
+            }
+    }
     fun deleteProduct(fragment: ProductsFragment, productId: String) {
         mFireStore.collection(Constants.PRODUCTS)
             .document(productId)
@@ -266,6 +281,29 @@ class FirestoreClass {
                 fragment.hideProgressDialog()
                 Log.e(fragment.requireActivity().javaClass.simpleName, "Error while deleting the product", e)
 
+            }
+    }
+
+    fun checkIfItemExistInCart(activity: ProductDetailsActivity, productId: String) {
+        mFireStore.collection(Constants.CART_ITEMS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .whereEqualTo(Constants.PRODUCT_ID, productId)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                if (document.documents.size > 0) {
+                    activity.productExistsInCart()
+                }else{
+                    activity.hideProgressDialog()
+                }
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while checking the exisiting cart list.",
+                    e
+                )
             }
     }
     fun getDashboardItemList(fragment: DashboardFragment){
