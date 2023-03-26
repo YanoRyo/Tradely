@@ -2,6 +2,7 @@ package com.example.tradely.ui.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityProductDetailsBinding
 import com.example.tradely.firestore.FirestoreClass
@@ -24,6 +25,17 @@ class ProductDetailsActivity : BaseActivity() {
         if (intent.hasExtra(Constants.EXTRA_PRODUCT_ID)) {
             mProductId = intent.getStringExtra(Constants.EXTRA_PRODUCT_ID)!!
             Log.i("product id", mProductId)
+        }
+        var productOwnerId:String = ""
+
+        if (intent.hasExtra(Constants.EXTRA_PRODUCT_OWNER_ID)) {
+            productOwnerId = intent.getStringExtra(Constants.EXTRA_PRODUCT_OWNER_ID)!!
+        }
+
+        if (FirestoreClass().getCurrentUserID() == productOwnerId) {
+            binding.btnAddToCart.visibility = View.GONE
+        }else {
+            binding.btnAddToCart.visibility = View.VISIBLE
         }
         getProductDetails()
     }
