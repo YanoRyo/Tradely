@@ -8,6 +8,7 @@ import com.example.tradely.R
 import com.example.tradely.databinding.FragmentDashboardBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Product
+import com.example.tradely.ui.activities.CartListActivity
 import com.example.tradely.ui.activities.LoginActivity
 import com.example.tradely.ui.activities.ProductDetailsActivity
 import com.example.tradely.ui.activities.SettingsActivity
@@ -57,16 +58,25 @@ class DashboardFragment : BaseFragment() {
 
     @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
+        val currentUser = FirebaseAuth.getInstance().currentUser
         when (item.itemId) {
             R.id.action_settings -> {
-                val currentUser = FirebaseAuth.getInstance().currentUser
-                if (currentUser != null){
+                return if (currentUser != null){
                     startActivity(Intent(activity, SettingsActivity::class.java))
+                    true
                 } else {
                     startActivity(Intent(activity, LoginActivity::class.java))
+                    true
                 }
-                return true
+            }
+            R.id.action_cart -> {
+                return if (currentUser != null){
+                    startActivity(Intent(activity, CartListActivity::class.java))
+                    true
+                } else {
+                    startActivity(Intent(activity, LoginActivity::class.java))
+                    true
+                }
             }
         }
         return super.onOptionsItemSelected(item)

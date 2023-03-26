@@ -1,5 +1,6 @@
 package com.example.tradely.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -114,6 +115,9 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
             when(view.id){
                 R.id.btn_add_to_cart -> {
                     addToCart()
+                }
+                R.id.btn_go_to_cart -> {
+                    startActivity(Intent(this@ProductDetailsActivity, CartListActivity::class.java))
                 }
             }
         }
