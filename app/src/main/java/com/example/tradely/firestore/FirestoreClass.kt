@@ -16,6 +16,7 @@ import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
@@ -282,6 +283,38 @@ class FirestoreClass {
                 Log.e(fragment.requireActivity().javaClass.simpleName, "Error while deleting the product", e)
 
             }
+    }
+
+    fun getCartList(activity: Activity) {
+        mFireStore.collection(Constants.CART_ITEMS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get()
+            .addOnSuccessListener {document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val list: ArrayList<CartItem> = ArrayList()
+
+                for (i in document.documents) {
+                    val cartItem = i.toObject(CartItem::class.java)
+                    if (cartItem != null) {
+                        cartItem.id = i.id
+                    }
+                    list.add(cartItem!!)
+                }
+                when(activity) {
+                    is CartListActivity ->{
+                        activity.successCarItemList(list)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when(activity) {
+                    is CartListActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "Error while getting the cart list items.",e)
+            }
+
     }
 
     fun checkIfItemExistInCart(activity: ProductDetailsActivity, productId: String) {
