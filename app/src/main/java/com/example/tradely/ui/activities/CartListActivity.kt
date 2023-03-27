@@ -108,6 +108,10 @@ class CartListActivity : BaseActivity() {
         FirestoreClass().getAllProductsList(this@CartListActivity)
     }
 
+    fun itemUpdateSuccess() {
+        hideProgressDialog()
+        getCartItemsList()
+    }
     private fun getCartItemsList() {
 //        showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().getCartList(this@CartListActivity)
