@@ -1,10 +1,12 @@
 package com.example.tradely.ui.activities
 
+import android.content.ContextParams
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityProductDetailsBinding
 import com.example.tradely.firestore.FirestoreClass
@@ -69,10 +71,22 @@ class ProductDetailsActivity : BaseActivity(), View.OnClickListener {
         binding.tvProductDetailsDescription.text = product.description
         binding.tvProductDetailsAvailableQuantity.text = product.stock_quantity
 
-        if (FirestoreClass().getCurrentUserID() == product.user_id) {
+        if (product.stock_quantity.toInt() == 0) {
             hideProgressDialog()
+            binding.btnAddToCart.visibility = View.GONE
+            binding.tvProductDetailsAvailableQuantity.text = resources.getString(R.string.lbl_out_of_stock)
+            binding.tvProductDetailsAvailableQuantity.setTextColor(
+                ContextCompat.getColor(
+                    this@ProductDetailsActivity,
+                    R.color.colorSnackBarError
+                )
+            )
         }else{
-            FirestoreClass().checkIfItemExistInCart(this@ProductDetailsActivity, mProductId)
+            if (FirestoreClass().getCurrentUserID() == product.user_id) {
+                hideProgressDialog()
+            }else{
+                FirestoreClass().checkIfItemExistInCart(this@ProductDetailsActivity, mProductId)
+            }
         }
     }
 

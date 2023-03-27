@@ -16,7 +16,6 @@ import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
@@ -302,7 +301,7 @@ class FirestoreClass {
                 }
                 when(activity) {
                     is CartListActivity ->{
-                        activity.successCarItemList(list)
+                        activity.successCartItemList(list)
                     }
                 }
             }
@@ -337,6 +336,48 @@ class FirestoreClass {
                     "Error while checking the exisiting cart list.",
                     e
                 )
+            }
+    }
+
+    fun removeItemFromCart(context: Context, cart_id:String) {
+        mFireStore.collection(Constants.CART_ITEMS)
+            .document(cart_id)
+            .delete()
+            .addOnSuccessListener {
+                when(context) {
+                    is CartListActivity -> {
+                        context.itemRemovedSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when(context) {
+                    is CartListActivity -> {
+                        context.hideProgressDialog()
+                    }
+                }
+                Log.e(context.javaClass.simpleName, "Error while removing the items from the cart list", e)
+
+            }
+    }
+
+    fun getAllProductsList(activity: CartListActivity) {
+        mFireStore.collection(Constants.PRODUCTS)
+            .get()
+            .addOnSuccessListener { document ->
+                activity.hideProgressDialog()
+                Log.e("Product List", document.documents.toString())
+                val productList: ArrayList<Product> = ArrayList()
+                for (i in document.documents) {
+                    val product = i.toObject(Product::class.java)
+                    product!!.product_id = i.id
+                    productList.add(product)
+                }
+                activity.successProductsListFromFireStore(productList)
+            }
+            .addOnFailureListener {e ->
+                activity.hideProgressDialog()
+                Log.e("Get Product List", "Error while getting all product list.",e)
             }
     }
     fun getDashboardItemList(fragment: DashboardFragment){
