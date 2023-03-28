@@ -1,5 +1,6 @@
 package com.example.tradely.ui.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.tradely.R
@@ -16,6 +17,11 @@ class AddressListActivity : AppCompatActivity() {
         setContentView(view)
 
         setupActionBar()
+
+        binding.tvAddAddress.setOnClickListener {
+            val intent = Intent(this@AddressListActivity, AddEditAddressActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupActionBar() {
