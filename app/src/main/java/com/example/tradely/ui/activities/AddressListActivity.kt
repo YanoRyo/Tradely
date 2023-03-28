@@ -14,6 +14,8 @@ class AddressListActivity : AppCompatActivity() {
         binding = ActivityAddressListBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        setupActionBar()
     }
 
     private fun setupActionBar() {
