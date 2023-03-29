@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.fragment.app.Fragment
+import com.example.tradely.models.Address
 import com.example.tradely.models.CartItem
 import com.example.tradely.models.Product
 import com.example.tradely.models.User
@@ -315,6 +316,18 @@ class FirestoreClass {
             }
     }
 
+    fun addAddress(activity: AddEditAddressActivity, addressInfo: Address) {
+        mFireStore.collection(Constants.ADDRESS)
+            .document()
+            .set(addressInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.addUpdateAddressSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while adding the address", e)
+            }
+    }
     fun updateMyCart(context: Context, cart_id: String, itemHashMap: HashMap<String, Any>) {
         mFireStore.collection(Constants.CART_ITEMS)
             .document(cart_id)
