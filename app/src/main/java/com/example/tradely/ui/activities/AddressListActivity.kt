@@ -3,10 +3,13 @@ package com.example.tradely.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityAddressListBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Address
+import com.example.tradely.ui.adapters.AddressListAdapter
 
 class AddressListActivity : BaseActivity() {
 
@@ -24,6 +27,10 @@ class AddressListActivity : BaseActivity() {
             val intent = Intent(this@AddressListActivity, AddEditAddressActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
         getAddressList()
     }
 
@@ -34,8 +41,18 @@ class AddressListActivity : BaseActivity() {
 
     fun successAddressListFromFireStore(addressList: ArrayList<Address>) {
         hideProgressDialog()
-        for (i in  addressList) {
-            Log.i("Name and Address", "${i.name} + ${i.address}")
+        if (addressList.size > 0) {
+            binding.rvAddressList.visibility = View.VISIBLE
+            binding.tvNoAddressFound.visibility = View.GONE
+            binding.rvAddressList.layoutManager = LinearLayoutManager(this@AddressListActivity)
+            binding.rvAddressList.setHasFixedSize(true)
+
+            val addressAdapter = AddressListAdapter(this, addressList)
+            binding.rvAddressList.adapter = addressAdapter
+
+        }else{
+            binding.rvAddressList.visibility = View.GONE
+            binding.tvNoAddressFound.visibility = View.VISIBLE
         }
     }
 
