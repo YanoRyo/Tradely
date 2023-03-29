@@ -17,6 +17,7 @@ import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
@@ -316,6 +317,25 @@ class FirestoreClass {
             }
     }
 
+    fun getAddressesList(activity: AddressListActivity) {
+        mFireStore.collection(Constants.ADDRESS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val addressList: ArrayList<Address> = ArrayList()
+                for (i in document.documents) {
+                    val address = i.toObject(Address::class.java)
+                    address!!.id = i.id
+                    addressList.add(address)
+                }
+                activity.successAddressListFromFireStore(addressList)
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while getting the address", e)
+            }
+    }
     fun addAddress(activity: AddEditAddressActivity, addressInfo: Address) {
         mFireStore.collection(Constants.ADDRESS)
             .document()

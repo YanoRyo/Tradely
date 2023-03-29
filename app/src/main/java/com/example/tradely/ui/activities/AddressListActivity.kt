@@ -1,12 +1,14 @@
 package com.example.tradely.ui.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityAddressListBinding
+import com.example.tradely.firestore.FirestoreClass
+import com.example.tradely.models.Address
 
-class AddressListActivity : AppCompatActivity() {
+class AddressListActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAddressListBinding
 
@@ -21,6 +23,19 @@ class AddressListActivity : AppCompatActivity() {
         binding.tvAddAddress.setOnClickListener {
             val intent = Intent(this@AddressListActivity, AddEditAddressActivity::class.java)
             startActivity(intent)
+        }
+        getAddressList()
+    }
+
+    private fun getAddressList() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getAddressesList(this@AddressListActivity)
+    }
+
+    fun successAddressListFromFireStore(addressList: ArrayList<Address>) {
+        hideProgressDialog()
+        for (i in  addressList) {
+            Log.i("Name and Address", "${i.name} + ${i.address}")
         }
     }
 
