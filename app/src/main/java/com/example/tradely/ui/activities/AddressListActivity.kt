@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.example.tradely.databinding.ActivityAddressListBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Address
 import com.example.tradely.ui.adapters.AddressListAdapter
+import com.example.tradely.utils.SwipeToDeleteCallback
 import com.example.tradely.utils.SwipeToEditCallback
 
 class AddressListActivity : BaseActivity() {
@@ -62,14 +64,29 @@ class AddressListActivity : BaseActivity() {
                     )
                 }
             }
-
             val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
             editItemTouchHelper.attachToRecyclerView(binding.rvAddressList)
+
+            val deleteSwipeHandler = object: SwipeToDeleteCallback(this) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    showProgressDialog(resources.getString(R.string.please_wait))
+                    FirestoreClass().deleteAddress(this@AddressListActivity, addressList[viewHolder.adapterPosition].id)
+                }
+            }
+            val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
+            deleteItemTouchHelper.attachToRecyclerView(binding.rvAddressList)
+
 
         }else{
             binding.rvAddressList.visibility = View.GONE
             binding.tvNoAddressFound.visibility = View.VISIBLE
         }
+    }
+
+    fun deleteAddressSuccess() {
+        hideProgressDialog()
+        Toast.makeText(this@AddressListActivity, resources.getString(R.string.err_your_address_deleted_successfully),Toast.LENGTH_LONG).show()
+        getAddressList()
     }
 
     private fun setupActionBar() {
