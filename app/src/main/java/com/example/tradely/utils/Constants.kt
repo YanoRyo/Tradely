@@ -36,7 +36,7 @@ object Constants {
     const val HOME: String = "Home"
     const val OFFICE: String = "Office"
     const val OTHER: String = "Other"
-    const val ADDRESS:String = "address"
+    const val ADDRESSES:String = "address"
     const val EXTRA_ADDRESS_DETAILS:String = "AddressDetails"
 
     fun showImageChooser(activity: Activity) {
