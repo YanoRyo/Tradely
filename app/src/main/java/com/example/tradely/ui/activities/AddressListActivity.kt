@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityAddressListBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Address
 import com.example.tradely.ui.adapters.AddressListAdapter
+import com.example.tradely.utils.SwipeToEditCallback
 
 class AddressListActivity : BaseActivity() {
 
@@ -49,6 +52,19 @@ class AddressListActivity : BaseActivity() {
 
             val addressAdapter = AddressListAdapter(this, addressList)
             binding.rvAddressList.adapter = addressAdapter
+
+            val editSwipeHandler = object: SwipeToEditCallback(this) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val adapter = binding.rvAddressList.adapter as AddressListAdapter
+                    adapter.notifyEditItem(
+                        this@AddressListActivity,
+                        viewHolder.adapterPosition
+                    )
+                }
+            }
+
+            val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
+            editItemTouchHelper.attachToRecyclerView(binding.rvAddressList)
 
         }else{
             binding.rvAddressList.visibility = View.GONE
