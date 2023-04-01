@@ -1,5 +1,6 @@
 package com.example.tradely.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,6 +11,7 @@ import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.CartItem
 import com.example.tradely.models.Product
 import com.example.tradely.ui.adapters.CartItemsListAdapter
+import com.example.tradely.utils.Constants
 
 class CartListActivity : BaseActivity() {
 
@@ -24,6 +26,12 @@ class CartListActivity : BaseActivity() {
         setContentView(view)
 
         setupActionBar()
+
+        binding.llCheckout.setOnClickListener {
+            val intent = Intent(this@CartListActivity, AddressListActivity::class.java)
+            intent.putExtra(Constants.EXTRA_SELECT_ADDRESS, true)
+            startActivity(intent)
+        }
     }
 
     private fun setupActionBar() {

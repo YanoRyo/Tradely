@@ -137,6 +137,7 @@ class AddEditAddressActivity : BaseActivity() {
             resources.getString(R.string.err_your_address_deleted_successfully)
         }
         Toast.makeText(this@AddEditAddressActivity, notifySuccessMessage,Toast.LENGTH_LONG).show()
+        setResult(RESULT_OK)
         finish()
     }
 

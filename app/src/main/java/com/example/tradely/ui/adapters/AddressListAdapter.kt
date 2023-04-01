@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradely.R
 import com.example.tradely.models.Address
@@ -19,7 +20,8 @@ import com.example.tradely.utils.Constants
  */
 open class AddressListAdapter(
     private val context: Context,
-    private var list: ArrayList<Address>
+    private var list: ArrayList<Address>,
+    private val selectAddress: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
@@ -42,7 +44,7 @@ open class AddressListAdapter(
     fun notifyEditItem(activity: Activity, position: Int) {
         val intent = Intent(context, AddEditAddressActivity::class.java)
         intent.putExtra(Constants.EXTRA_ADDRESS_DETAILS, list[position])
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent, Constants.ADD_ADDRESS_REQUEST_CODE)
         notifyItemChanged(position)
     }
 
@@ -65,6 +67,12 @@ open class AddressListAdapter(
             holder.itemView.findViewById<TextView>(R.id.tv_address_type).text = model.type
             holder.itemView.findViewById<TextView>(R.id.tv_address_details).text = "${model.address}, ${model.zipCode}"
             holder.itemView.findViewById<TextView>(R.id.tv_address_mobile_number).text = model.mobileNumber
+
+            if (selectAddress) {
+                holder.itemView.setOnClickListener {
+                    Toast.makeText(context, "Selected address: ${model.address}, ${model.zipCode}", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 
