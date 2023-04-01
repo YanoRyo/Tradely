@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tradely.R
 import com.example.tradely.models.Address
 import com.example.tradely.ui.activities.AddEditAddressActivity
+import com.example.tradely.ui.activities.CheckOutActivity
 import com.example.tradely.utils.Constants
 
 /**
@@ -70,7 +71,8 @@ open class AddressListAdapter(
 
             if (selectAddress) {
                 holder.itemView.setOnClickListener {
-                    Toast.makeText(context, "Selected address: ${model.address}, ${model.zipCode}", Toast.LENGTH_LONG).show()
+                    val intent = Intent(context, CheckOutActivity::class.java)
+                    context.startActivity(intent)
                 }
             }
         }

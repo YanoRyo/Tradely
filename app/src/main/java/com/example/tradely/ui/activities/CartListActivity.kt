@@ -27,7 +27,7 @@ class CartListActivity : BaseActivity() {
 
         setupActionBar()
 
-        binding.llCheckout.setOnClickListener {
+        binding.btnCheckout.setOnClickListener {
             val intent = Intent(this@CartListActivity, AddressListActivity::class.java)
             intent.putExtra(Constants.EXTRA_SELECT_ADDRESS, true)
             startActivity(intent)
