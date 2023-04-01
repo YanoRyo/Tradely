@@ -1,12 +1,14 @@
 package com.example.tradely.ui.activities
 
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityCheckOutBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Address
 import com.example.tradely.models.CartItem
 import com.example.tradely.models.Product
+import com.example.tradely.ui.adapters.CartItemsListAdapter
 import com.example.tradely.utils.Constants
 
 class CheckOutActivity : BaseActivity() {
@@ -71,6 +73,18 @@ class CheckOutActivity : BaseActivity() {
 
     fun successCartItemsList(cartList: ArrayList<CartItem>) {
         hideProgressDialog()
+        for (product in mProductsList){
+            for (cartItem in cartList){
+                if (product.product_id == cartItem.product_id) {
+                    cartItem.stock_quantity = product.stock_quantity
+                }
+            }
+        }
         mCartListItems = cartList
+        binding.rvCartListItems.layoutManager = LinearLayoutManager(this@CheckOutActivity)
+        binding.rvCartListItems.setHasFixedSize(true)
+
+        val cartListAdapter = CartItemsListAdapter(this@CheckOutActivity, mCartListItems, false)
+        binding.rvCartListItems.adapter = cartListAdapter
     }
 }
