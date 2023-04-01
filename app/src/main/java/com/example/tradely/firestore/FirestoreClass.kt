@@ -6,10 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.fragment.app.Fragment
-import com.example.tradely.models.Address
-import com.example.tradely.models.CartItem
-import com.example.tradely.models.Product
-import com.example.tradely.models.User
+import com.example.tradely.models.*
 import com.example.tradely.ui.activities.*
 import com.example.tradely.ui.fragments.DashboardFragment
 import com.example.tradely.ui.fragments.ProductsFragment
@@ -320,6 +317,19 @@ class FirestoreClass {
                     }
                 }
                 Log.e(activity.javaClass.simpleName, "Error while getting the cart list items.",e)
+            }
+    }
+
+    fun placeOrder(activity: CheckOutActivity, order: Order){
+        mFireStore.collection(Constants.ORDERS)
+            .document()
+            .set(order, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.orderPlacedSuccess()
+            }
+            .addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while placing an order", e)
             }
     }
 

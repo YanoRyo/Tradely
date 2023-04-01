@@ -1,12 +1,16 @@
 package com.example.tradely.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityCheckOutBinding
 import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Address
 import com.example.tradely.models.CartItem
+import com.example.tradely.models.Order
 import com.example.tradely.models.Product
 import com.example.tradely.ui.adapters.CartItemsListAdapter
 import com.example.tradely.utils.Constants
@@ -17,6 +21,8 @@ class CheckOutActivity : BaseActivity() {
     private var mAddressDetails: Address? = null
     private lateinit var mProductsList: ArrayList<Product>
     private lateinit var mCartListItems: ArrayList<CartItem>
+    private var mSubTotal: Double = 0.0
+    private var mTotalAmount: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,11 @@ class CheckOutActivity : BaseActivity() {
             }
             binding.tvMobileNumber.text = mAddressDetails?.mobileNumber
         }
+
+        binding.btnPlaceOrder.setOnClickListener {
+            placeAnOrder()
+        }
+
         getProductList()
     }
 
@@ -86,5 +97,50 @@ class CheckOutActivity : BaseActivity() {
 
         val cartListAdapter = CartItemsListAdapter(this@CheckOutActivity, mCartListItems, false)
         binding.rvCartListItems.adapter = cartListAdapter
+
+        for (item in mCartListItems) {
+            val availableQuantity = item.stock_quantity.toInt()
+            if (availableQuantity > 0) {
+                val price = item.price.toDouble()
+                val quantity = item.cart_quantity.toInt()
+                mSubTotal += (price * quantity)
+            }
+        }
+        binding.tvCheckoutSubTotal.text = "$${mSubTotal}"
+        binding.tvCheckoutShippingCharge.text = "$10.0"
+
+        if (mSubTotal > 0){
+            binding.llCheckoutPlaceOrder.visibility = View.VISIBLE
+            mTotalAmount = mSubTotal * 10.0
+            binding.tvCheckoutTotalAmount.text = "$${mTotalAmount}"
+        }else{
+            binding.llCheckoutPlaceOrder.visibility = View.GONE
+        }
+    }
+
+    fun orderPlacedSuccess() {
+        hideProgressDialog()
+        Toast.makeText(this@CheckOutActivity, "Your order was placed successfully.", Toast.LENGTH_LONG).show()
+        val intent = Intent(this@CheckOutActivity, DashboardActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+
+    }
+    private fun placeAnOrder() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        if (mAddressDetails != null){
+            val order = Order(
+                FirestoreClass().getCurrentUserID(),
+                mCartListItems,
+                mAddressDetails!!,
+                "My order ${System.currentTimeMillis()}",
+                mCartListItems[0].image,
+                mSubTotal.toString(),
+                "10.0",
+                mTotalAmount.toString()
+            )
+            FirestoreClass().placeOrder(this, order)
+        }
     }
 }
