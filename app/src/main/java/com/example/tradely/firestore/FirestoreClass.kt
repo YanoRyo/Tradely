@@ -305,11 +305,17 @@ class FirestoreClass {
                     is CartListActivity ->{
                         activity.successCartItemList(list)
                     }
+                    is CheckOutActivity -> {
+                        activity.successCartItemsList(list)
+                    }
                 }
             }
             .addOnFailureListener { e ->
                 when(activity) {
                     is CartListActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                    is CheckOutActivity ->{
                         activity.hideProgressDialog()
                     }
                 }
@@ -456,11 +462,10 @@ class FirestoreClass {
             }
     }
 
-    fun getAllProductsList(activity: CartListActivity) {
+    fun getAllProductsList(activity: Activity) {
         mFireStore.collection(Constants.PRODUCTS)
             .get()
             .addOnSuccessListener { document ->
-                activity.hideProgressDialog()
                 Log.e("Product List", document.documents.toString())
                 val productList: ArrayList<Product> = ArrayList()
                 for (i in document.documents) {
@@ -468,10 +473,24 @@ class FirestoreClass {
                     product!!.product_id = i.id
                     productList.add(product)
                 }
-                activity.successProductsListFromFireStore(productList)
+                when(activity) {
+                    is CartListActivity ->{
+                        activity.successProductsListFromFireStore(productList)
+                    }
+                    is CheckOutActivity ->{
+                        activity.successProductsListFromFireStore(productList)
+                    }
+                }
             }
             .addOnFailureListener {e ->
-                activity.hideProgressDialog()
+                when(activity) {
+                    is CartListActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                    is CheckOutActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e("Get Product List", "Error while getting all product list.",e)
             }
     }

@@ -1,16 +1,20 @@
 package com.example.tradely.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityCheckOutBinding
+import com.example.tradely.firestore.FirestoreClass
 import com.example.tradely.models.Address
+import com.example.tradely.models.CartItem
+import com.example.tradely.models.Product
 import com.example.tradely.utils.Constants
 
-class CheckOutActivity : AppCompatActivity() {
+class CheckOutActivity : BaseActivity() {
 
     private lateinit var binding: ActivityCheckOutBinding
     private var mAddressDetails: Address? = null
+    private lateinit var mProductsList: ArrayList<Product>
+    private lateinit var mCartListItems: ArrayList<CartItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +39,7 @@ class CheckOutActivity : AppCompatActivity() {
             }
             binding.tvMobileNumber.text = mAddressDetails?.mobileNumber
         }
-
+        getProductList()
     }
 
     private fun setupActionBar() {
@@ -49,5 +53,24 @@ class CheckOutActivity : AppCompatActivity() {
         }
 
         binding.toolbarCheckoutActivity.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    fun successProductsListFromFireStore(productsList: ArrayList<Product>) {
+        hideProgressDialog()
+        mProductsList = productsList
+        getCartItemsList()
+    }
+
+    private fun getCartItemsList() {
+        FirestoreClass().getCartList(this@CheckOutActivity)
+    }
+    private fun getProductList() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getAllProductsList(this@CheckOutActivity)
+    }
+
+    fun successCartItemsList(cartList: ArrayList<CartItem>) {
+        hideProgressDialog()
+        mCartListItems = cartList
     }
 }
