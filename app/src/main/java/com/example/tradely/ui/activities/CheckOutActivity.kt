@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.tradely.R
 import com.example.tradely.databinding.ActivityCheckOutBinding
+import com.example.tradely.models.Address
+import com.example.tradely.utils.Constants
 
 class CheckOutActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCheckOutBinding
+    private var mAddressDetails: Address? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +19,22 @@ class CheckOutActivity : AppCompatActivity() {
         setContentView(view)
 
         setupActionBar()
+
+        if (intent.hasExtra(Constants.EXTRA_SELECTED_ADDRESS)) {
+            mAddressDetails = intent.getParcelableExtra<Address>(Constants.EXTRA_SELECTED_ADDRESS)
+        }
+
+        if (mAddressDetails != null) {
+            binding.tvCheckoutAddressType.text = mAddressDetails?.type
+            binding.tvCheckoutFullName.text = mAddressDetails?.name
+            binding.tvCheckoutAddress.text = "${mAddressDetails!!.address}, ${mAddressDetails!!.zipCode}"
+            binding.tvCheckoutAdditionalNote.text = mAddressDetails?.additionalNote
+
+            if (mAddressDetails?.otherDetails!!.isNotEmpty()) {
+                binding.tvCheckoutOtherDetails.text = mAddressDetails?.otherDetails
+            }
+            binding.tvMobileNumber.text = mAddressDetails?.mobileNumber
+        }
 
     }
 
