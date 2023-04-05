@@ -1,6 +1,7 @@
 package com.example.tradely.ui.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradely.R
 import com.example.tradely.models.Order
+import com.example.tradely.ui.activities.MyOrderDetailsActivity
+import com.example.tradely.utils.Constants
 import com.example.tradely.utils.GlideLoader
 
 
@@ -58,6 +61,12 @@ open class MyOrdersListAdapter(
             holder.itemView.findViewById<AppCompatTextView>(R.id.tv_item_price).text = "$${model.total_amount}"
 
             holder.itemView.findViewById<ImageButton>(R.id.ib_delete_product).visibility = View.GONE
+
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, MyOrderDetailsActivity::class.java)
+                intent.putExtra(Constants.EXTRA_MY_ORDER_DETAILS, model)
+                context.startActivity(intent)
+            }
         }
     }
 
