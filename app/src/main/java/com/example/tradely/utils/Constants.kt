@@ -13,6 +13,7 @@ object Constants {
     const val CART_ITEMS:String = "cart_items"
     const val ADDRESSES:String = "address"
     const val ORDERS:String = "orders"
+    const val SOLD_PRODUCT:String = "sold_products"
 
     const val TRADELY_PREFERENCES: String = "TradelyPrefs"
     const val USER_ID:String = "user_id"

@@ -321,15 +321,30 @@ class FirestoreClass {
             }
     }
 
-    fun updateAllDetails(activity: CheckOutActivity, cartList: ArrayList<CartItem>) {
+    fun updateAllDetails(activity: CheckOutActivity, cartList: ArrayList<CartItem>, order: Order) {
         val writeBatch = mFireStore.batch()
         for (cartItem in cartList) {
-            val productHashMap = HashMap<String, Any>()
-            productHashMap[Constants.STOCK_QUANTITY] =
-                (cartItem.stock_quantity.toInt() - cartItem.cart_quantity.toInt()).toString()
+//            val productHashMap = HashMap<String, Any>()
+//            productHashMap[Constants.STOCK_QUANTITY] =
+//                (cartItem.stock_quantity.toInt() - cartItem.cart_quantity.toInt()).toString()
 
-            val documentReference = mFireStore.collection(Constants.PRODUCTS).document(cartItem.product_id)
-            writeBatch.update(documentReference, productHashMap)
+
+            val soldProduct = SoldProduct(
+                // Here the user id will be of product owner.
+                cartItem.product_owner_id,
+                cartItem.title,
+                cartItem.price,
+                cartItem.cart_quantity,
+                cartItem.image,
+                order.title,
+                order.order_datetime,
+                order.sub_total_amount,
+                order.shipping_charge,
+                order.total_amount,
+                order.address
+            )
+            val documentReference = mFireStore.collection(Constants.SOLD_PRODUCT).document(cartItem.product_id)
+            writeBatch.set(documentReference, soldProduct)
         }
         for (cartItem in cartList) {
             val documentReference = mFireStore.collection(Constants.CART_ITEMS).document(cartItem.id)
