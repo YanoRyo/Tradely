@@ -11,6 +11,7 @@ import com.example.tradely.ui.activities.*
 import com.example.tradely.ui.fragments.DashboardFragment
 import com.example.tradely.ui.fragments.OrdersFragment
 import com.example.tradely.ui.fragments.ProductsFragment
+import com.example.tradely.ui.fragments.SoldProductsFragment
 import com.example.tradely.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -357,6 +358,29 @@ class FirestoreClass {
             .addOnFailureListener {e ->
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error while updating all the details after order placed.")
+            }
+    }
+
+    fun getSoldProductsList(fragment: SoldProductsFragment) {
+        mFireStore.collection(Constants.SOLD_PRODUCT)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document ->
+                val list: ArrayList<SoldProduct> = ArrayList()
+                for (i in document.documents) {
+                    val soldProduct = i.toObject(SoldProduct::class.java)!!
+                    soldProduct.id = i.id
+                    list.add(soldProduct)
+                }
+                fragment.successSoldProductsList(list)
+            }
+            .addOnFailureListener { e ->
+                fragment.hideProgressDialog()
+                Log.e(
+                    fragment.javaClass.simpleName,
+                    "Error while getting the list of sold products.",
+                    e
+                )
             }
     }
 
