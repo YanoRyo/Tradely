@@ -1,6 +1,7 @@
 package com.example.tradely.ui.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tradely.R
 import com.example.tradely.models.SoldProduct
+import com.example.tradely.ui.activities.SoldProductDetailsActivity
+import com.example.tradely.utils.Constants
 import com.example.tradely.utils.GlideLoader
 
 /**
@@ -60,6 +63,12 @@ open class SoldProductsListAdapter(
             holder.itemView.findViewById<TextView>(R.id.tv_item_price).text = "$${model.price}"
 
             holder.itemView.findViewById<ImageButton>(R.id.ib_delete_product).visibility = View.GONE
+
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, SoldProductDetailsActivity::class.java)
+                intent.putExtra(Constants.EXTRA_SOLD_PRODUCT_DETAILS, model)
+                context.startActivity(intent)
+            }
         }
     }
 
